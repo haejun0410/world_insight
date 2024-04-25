@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>로그인</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f7f7f7;
+            font-family: 'Arial', sans-serif;
+            padding: 50px;
+        }
+
+        h1, h3 {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        form {
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        label {
+            font-weight: bold;
+        }
+
+        input[type="text"], input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+        }
+
+        input[type="submit"], input[type="button"] {
+            width: 100%;
+            padding: 10px;
+            border-radius: 4px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        input[type="submit"]:hover, input[type="button"]:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <form method="POST" id="authForm" onsubmit="return validateForm()">
+                    <h3>로그인</h3>
+                    <div class="form-group">
+                        <label for="id">아이디(이메일)</label>
+                        <input type="text" id="id" name="id" class="form-control" placeholder="id">
+                    </div>
+                    <div class="form-group">
+                        <label for="pw">비밀번호</label>
+                        <input type="password" id="pw" name="pw" class="form-control" placeholder="pw">
+                    </div>
+                    <input type="submit" name="sign_in" value="로그인" class="btn btn-primary">
+                    <div class="text-center mt-3">
+                        <input type="button" class="btn btn-link" value="회원가입" name="register" onclick="location.href='register.html'">
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function validateForm() {
+            var id = document.getElementById("id").value;
+            var pw = document.getElementById("pw").value;
+            if (id.trim() == ""){
+                alert("아이디(이메일)을 입력해주세요.");
+                return false;
+            }
+            else if (pw.trim() ==""){
+                alert("비밀번호를 입력해주세요.");
+                return false;
+            }
+
+            return true; 
+        }
+    </script>
+</body>
+</html>

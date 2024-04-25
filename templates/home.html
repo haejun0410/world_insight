@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>메인 페이지</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        header {
+            background-color: #f8f9fa;
+        }
+
+        .login-button {
+            margin-left: 10px; 
+        }
+    </style>
+</head>
+<body>
+
+<div class="container-fluid">
+
+    <header class="d-flex justify-content-between align-items-center py-2">
+        <h1 class="m-0">홈 페이지</h1>
+        <!-- 세션에 username이 있는지 확인하여 로그인 상태를 판단 -->
+        {% if 'username' in session %}
+            <button class="btn btn-primary login-button"><a href="{{ url_for('logout') }}" class="text-white">로그아웃</a></button>
+        {% else %}
+            <button class="btn btn-primary login-button"><a href="{{ url_for('login') }}" class="text-white">로그인/회원가입</a></button>
+        {% endif %}
+    </header>
+
+    <main class="mt-4">
+        <p>컨텐츠 추가</p>
+    </main>
+
+</div>
+
+<!-- 부트스트랩 JS 및 Popper.js, jQuery 스크립트 추가 -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+</body>
+</html>

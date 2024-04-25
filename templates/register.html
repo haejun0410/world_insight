@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>회원가입</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f7f7f7;
+            font-family: 'Arial', sans-serif;
+            padding: 50px;
+        }
+
+        h3 {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        form {
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        label {
+            font-weight: bold;
+        }
+
+        input[type="text"], input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+        }
+
+        input[type="submit"] {
+            width: 100%;
+            padding: 10px;
+            border-radius: 4px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container-fluid">
+
+        <header class="d-flex justify-content-between align-items-center py-2">
+            <button type="button" class="btn btn-outline-primary" id="home_button" onclick="goHome()">홈</button>
+        </header>
+    
+    
+    </div>
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <form method="POST" id="authForm" onsubmit="return validateForm()">
+                    <h3>회원가입</h3>
+                    <div class="form-group">
+                        <label for="regi_id">아이디(이메일)</label>
+                        <div class="input-group">
+                            <input type="text" id="register_id" name="register_id" class="form-control">
+                            <div class="input-group-append">
+                                <button type = "button" class = "btn btn-outline-primary", id = "check_id", onclick="checkIdDuplicate()">중복확인</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="register_pw">비밀번호</label>
+                        <input type="password" id="register_pw" name="register_pw" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="register_pw_check">비밀번호 확인</label>
+                        <input type="password" id="register_pw_check" name="register_pw_check" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="register_name">이름</label>
+                        <input type="text" id="register_name" name="register_name" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="register_nickname">닉네임</label>
+                        <div class="input-group">
+                            <input type="text" id="register_nickname" name="register_nickname" class="form-control">
+                            <div class="input-group-append">
+                                <button type="button" class = "btn btn-outline-primary", id = "check_nickname", onclick="checkNicknameDuplicate()">중복확인</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="register_phone_number">연락처</label>
+                        <input type="text" id="register_phone_number" name="register_phone_number" class="form-control">
+                    </div>
+                    <input type="submit" name="submit" value="가입하기" class="btn btn-primary">
+                </form>
+            </div>
+        </div>
+    </div>
+    <script>
+        var checked_id = false;
+        var checked_nickname = false;
+        function goHome() {
+        window.location.href = "{{ url_for('home') }}";
+        }
+        function checkIdDuplicate() {
+            let value = document.getElementById('register_id').value;
+
+            if (!value) {
+                alert("아이디를 입력해주세요.");
+                return;
+            }
+
+            let xhr = new XMLHttpRequest();
+            xhr.open('POST', '/check_id_duplicate', true);
+            xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === 4) {
+                    if (xhr.status === 200) {
+                        let data = JSON.parse(xhr.responseText);
+
+                        if (data.id_exists) {
+                            alert("이미 사용중인 아이디입니다.");
+                        } else {
+                            alert("사용 가능한 아이디입니다.");
+                            checked_id = true;
+                        }
+                    } else {
+                        alert("서버 오류가 발생했습니다.");
+                    }
+                }
+            };
+
+            xhr.send("register_id=" + encodeURIComponent(value));
+        }
+
+        function checkNicknameDuplicate() {
+            let value = document.getElementById('register_nickname').value;
+
+            if (!value) {
+                alert("닉네임을 입력해주세요.");
+                return;
+            }
+
+            let xhr = new XMLHttpRequest();
+            xhr.open('POST', '/check_nickname_duplicate', true);
+            xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === 4) {
+                    if (xhr.status === 200) {
+                        let data = JSON.parse(xhr.responseText);
+
+                        if (data.nickname_exists) {
+                            alert("이미 사용중인 닉네임입니다.");
+                        } else {
+                            alert("사용 가능한 아이디입니다.");
+                            checked_nickname = true;
+                        }
+                    } else {
+                        alert("서버 오류가 발생했습니다.");
+                    }
+                }
+            };
+
+            xhr.send("register_nickname=" + encodeURIComponent(value));
+        }
+        function validateForm() {
+            let id = document.getElementById("register_id").value;
+            let pw = document.getElementById("register_pw").value;
+            let pw_check = document.getElementById("register_pw_check").value;
+            let name = document.getElementById("register_name").value;
+            let nickname = document.getElementById("register_nickname").value;
+            let phone_number = document.getElementById("register_phone_number").value;
+            
+            if (id.trim() == ""){
+                alert("아이디(이메일)을 입력해주세요.");
+                return false;
+            }
+            if (checked_id == false){
+                alert("아이디 중복 체크를 해주세요!");
+                return false;
+            }
+            else if (pw.trim() ==""){
+                alert("비밀번호를 입력해주세요.");
+                return false;
+            }
+            else if (pw_check.trim() ==""){
+                alert("비밀번호를 입력해주세요.");
+                return false;
+            }
+            else if (name.trim() ==""){
+                alert("이름을 입력해주세요.");
+                return false;
+            }
+            else if (nickname.trim() ==""){
+                alert("닉네임 입력해주세요.");
+                return false;
+            }
+            else if (checked_nickname == false){
+                alert("닉네임 중복 체크를 해주세요!");
+                return false;
+            }
+            else if (phone_number.trim() ==""){
+                alert("연락처를 입력해주세요.");
+                return false;
+            }
+
+            return true; 
+        }
+    </script>
+</body>
+</html>
