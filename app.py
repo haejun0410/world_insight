@@ -5,12 +5,7 @@ import hashlib
 mysql = MySQL()
 app = Flask(__name__)
 
-app.config['MYSQL_DATABASE_USER'] = 'yobi'
-app.config['MYSQL_DATABASE_PASSWORD'] = 'user'
-app.config['MYSQL_DATABASE_DB'] = 'world_insight_db'
-app.config['MYSQL_DATABASE_HOST'] = '13.124.3.95'
-app.config['MYSQL_DATABASE_PORT'] = 50975
-app.secret_key = "YOBI"
+app.config.from_object(config['default'])
 mysql.init_app(app)
 
 def hash_password(password):
