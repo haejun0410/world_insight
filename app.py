@@ -32,7 +32,7 @@ def opinion_board():
 @app.route('/maps')
 def maps():
     error = None
-    return render_template("maps.html", error = error)
+    return render_template("maps.html", error = error, google_maps_api_key = app.config['GOOGLE_MAPS_API_KEY'])
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
