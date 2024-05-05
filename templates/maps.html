@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <style>
+      /*CSS 스타일을 추가*/
+      body{
+          background-color: #c7d1db;
+          text-align: center;
+          margin:80px;
+          padding: 0px;
+      }
+      .header {
+            padding : 10px;
+            margin : 10px;
+        }
+      .home-link{
+        position: absolute;
+        top: 0;
+        left: 0;
+      }
+      img {
+            padding: 5px 10px;
+            margin: 5px;
+        }
+  </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Google Maps</title>
+    <script defer src="static/index.js"></script>
+    <script
+      defer
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDizMVTC8xfPPkFa3aDgGP0jjgeDyH6bxk&callback=initMap"
+    ></script>
+  </head>
+  <body>
+    <!--홈으로 돌아가는 이미지-->
+    <div class="header">
+      <a href = "/" class="home-link">
+          <img src="static/img/global.png" alt="𝐆𝐋𝐎𝐁𝐀𝐋 𝐈𝐍𝐒𝐈𝐆𝐇𝐓 WITH BBC" width="250">
+      </a>
+  </div>
+    <div id="map" style="height: 600px"></div>
+  </body>
+</html>

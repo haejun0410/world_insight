@@ -1,44 +1,50 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>메인 페이지</title>
-    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-
+    <title>𝐆𝐋𝐎𝐁𝐀𝐋 𝐈𝐍𝐒𝐈𝐆𝐇𝐓 WITH BBC</title>
     <style>
-        header {
-            background-color: #f8f9fa;
-        }
+        /*CSS 스타일을 추가*/
+        body{
+            background-color: hsl(210, 22%, 82%);
+            text-align: center;
+            margin:100px;
 
-        .login-button {
-            margin-left: 10px; 
+            justify-content: center;
+        }
+        .button {
+            display: inline-block;
+            padding: 20px 30px;
+            margin: 5px;
+            background-color: #8ab1d6;
+            color: black;
+            text-decoration: none; /* 링크 밑줄 제거 */
+            border-radius: 5px; /* 버튼 모서리 둥글게 */
+            font-size: 22px;
+        }
+        .button:hover {
+            background-color: #3b73a7; /* 마우스 오버 시 배경색 변경 */
+        }
+        p {
+            font-size: 40px; /* p 태그의 글자 크기를 조정 */
         }
     </style>
 </head>
 <body>
+    <a href = "/" class="home-link">
+        <img src="static/img/global.png" alt="𝐆𝐋𝐎𝐁𝐀𝐋 𝐈𝐍𝐒𝐈𝐆𝐇𝐓 WITH BBC" width="700">
+    </a>
+    <p>𝐂𝐥𝐢𝐜𝐤 𝐭𝐨 𝐞𝐱𝐩𝐚𝐧𝐝 𝐲𝐨𝐮𝐫 𝐢𝐧𝐬𝐢𝐠𝐡𝐭!</p>
+    <p>𝐘𝐨𝐮 𝐜𝐚𝐧 𝐥𝐨𝐠 𝐢𝐧 𝐚𝐧𝐝 𝐬𝐡𝐚𝐫𝐞 𝐲𝐨𝐮𝐫 𝐨𝐩𝐢𝐧𝐢𝐨𝐧𝐬 𝐰𝐢𝐭𝐡 𝐨𝐭𝐡𝐞𝐫𝐬 𝐨𝐧 𝐭𝐡𝐞 𝐛𝐨𝐚𝐫𝐝</p>
+        
 
-<div class="container-fluid">
-
-    <header class="d-flex justify-content-between align-items-center py-2">
-        <h1 class="m-0">홈 페이지</h1>
-        <!-- 세션에 username이 있는지 확인하여 로그인 상태를 판단 -->
-        {% if 'username' in session %}
-            <button class="btn btn-primary login-button"><a href="{{ url_for('logout') }}" class="text-white">로그아웃</a></button>
-        {% else %}
-            <button class="btn btn-primary login-button"><a href="{{ url_for('login') }}" class="text-white">로그인/회원가입</a></button>
-        {% endif %}
-    </header>
-
-    <main class="mt-4">
-        <p>컨텐츠 추가</p>
-    </main>
-
-</div>
-
-<!-- 부트스트랩 JS 및 Popper.js, jQuery 스크립트 추가 -->
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-
+    <!-- 버튼을 추가 -->
+    <a href="opinion_board" class="button">𝐎𝐏𝐈𝐍𝐈𝐎𝐍 𝐁𝐎𝐀𝐑𝐃</a>
+    <a href="maps" class="button">𝐌𝐀𝐏</a>
+    {% if 'login_user' in session %}
+        <a href="logout" class="button">LOGOUT</a>
+    {% else %}
+        <a href="login" class="button">LOGIN</a>
+    {% endif %}
 </body>
 </html>

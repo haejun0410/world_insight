@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>𝐖𝐑𝐈𝐓𝐄 𝐘𝐎𝐔𝐑 𝐎𝐏𝐈𝐍𝐈𝐎𝐍</title>
+    <style>
+        /* CSS 스타일링 */
+        body {
+            background-color: hsl(210, 22%, 82%);
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+        }
+        .form-container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        .form-container h2 {
+            margin-bottom: 20px;
+        }
+        .form-container label {
+            display: block;
+            margin-bottom: 10px;
+        }
+        .form-container input[type="text"],
+        .form-container textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 0; /* 여기를 수정함 */
+            border: none; /* 테두리 없앰 */
+            border-bottom: 1px solid black; /* 하단 선 추가 */
+            outline: none; /* 포커스 효과 제거 */
+            resize: none; /* 크기 조절 비활성화 */
+        }
+        .form-container textarea {
+            min-height: 150px; /* 최소 높이 설정 */
+            height: auto;
+            overflow-y: hidden; /* 세로 스크롤바 감춤 */
+        }
+        .form-container button {
+            padding: 5px 10px;
+            margin: 5px;
+            background-color: #8ab1d6;
+            text-decoration: none; /* 링크 밑줄 제거 */
+            border-radius: 5px; /* 버튼 모서리 둥글게 */
+            font-size: 20px;
+            border: none; /* 테두리 없앰 */
+            outline: none; /* 포커스 효과 제거 */
+            cursor: pointer; /* 커서 모양 변경 */
+        }
+        .form-container button:hover {
+            background-color: #0056b3;
+        }
+        .home-link img {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            background-color: hsl(210, 22%, 82%);
+            padding: 5px;
+        }
+        .home-link img:hover {
+            background-color: #ddd;
+        }
+    </style>
+</head>
+<body>
+    <a href="opinion_board" class="home-link">
+        <img src="static/img/close.png" alt="home" width="30" height="30">
+    </a>
+<body>
+    <div class="form-container">
+        <h2>𝐖𝐑𝐈𝐓𝐄 𝐘𝐎𝐔𝐑 𝐎𝐏𝐈𝐍𝐈𝐎𝐍</h2>
+        <form method = "POST" id="opinionForm">
+            <input type="text" id="Title" name="Title" required placeholder="title">
+            <textarea id="Content" name="Content" required oninput="autoResize(this)" placeholder="Write your opinion"></textarea>
+            <button type="submit">𝐏𝐎𝐒𝐓 𝐈𝐓!</button>
+        </form>
+    </div>
+
+    <script>
+        function autoResize(textarea) {
+            textarea.style.height = 'auto';
+            textarea.style.height = textarea.scrollHeight + 'px';
+        }
+    </script>
+</body>
+</html>

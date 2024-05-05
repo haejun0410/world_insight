@@ -9,11 +9,13 @@
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <style>
         body {
-            background-color: #f7f7f7;
+            background-color: hsl(210, 22%, 82%);
             font-family: 'Arial', sans-serif;
-            padding: 50px;
         }
-
+        .header {
+            padding : 10px;
+            margin : 10px;
+        }
         h1, h3 {
             text-align: center;
             margin-bottom: 30px;
@@ -38,22 +40,31 @@
             border: 1px solid #ccc;
         }
 
-        input[type="submit"], input[type="button"] {
+        input[type="submit"]:hover, input[type="button"]:hover {
+            background-color: #0056b3;
+        }
+        .button {
             width: 100%;
             padding: 10px;
             border-radius: 4px;
-            background-color: #007bff;
-            color: white;
-            border: none;
+            background-color: #8ab1d6;
+            color: black;
+            text-decoration: none; /* 링크 밑줄 제거 */
+            border-radius: 5px; /* 버튼 모서리 둥글게 */
+            font-size: 22px;
             cursor: pointer;
         }
-
-        input[type="submit"]:hover, input[type="button"]:hover {
-            background-color: #0056b3;
+        .button:hover {
+            background-color: #3b73a7; /* 마우스 오버 시 배경색 변경 */
         }
     </style>
 </head>
 <body>
+    <div class="header">
+        <a href = "/" class="home-link">
+            <img src="static/img/global.png" alt="𝐆𝐋𝐎𝐁𝐀𝐋 𝐈𝐍𝐒𝐈𝐆𝐇𝐓 WITH BBC" width="250">
+        </a>
+    </div>
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-md-6">
@@ -67,9 +78,9 @@
                         <label for="pw">비밀번호</label>
                         <input type="password" id="pw" name="pw" class="form-control" placeholder="pw">
                     </div>
-                    <input type="submit" name="sign_in" value="로그인" class="btn btn-primary">
+                    <input type="submit" name="sign_in" value="로그인" class="button">
                     <div class="text-center mt-3">
-                        <input type="button" class="btn btn-link" value="회원가입" name="register" onclick="location.href='register.html'">
+                        <input type="button" class="button" value="회원가입" name="register" onclick="location.href='register.html'">
                     </div>
                 </form>
             </div>

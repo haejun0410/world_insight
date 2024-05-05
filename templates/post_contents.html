@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>게시물 상세 정보</title>
+    <style>
+        /* CSS 스타일링 */
+        body {
+            background-color: hsl(210, 22%, 82%);
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+        }
+        .post-detail {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        .post-detail h2 {
+            margin-bottom: 20px;
+        }
+        .post-detail .post-info {
+            margin-bottom: 20px;
+        }
+        .post-detail .post-info p {
+            margin: 0;
+            display: inline-block;
+            margin-right: 20px;
+            font-size: 14px;
+            color: #666;
+        }
+        .post-detail .post-content {
+            padding: 10px;
+            border: 1px solid #ddd;
+            background-color: #fff;
+        }
+        .btn-container {
+            margin-top: 20px;
+            text-align: center;
+        }
+        .btn-container button {
+            padding: 5px 10px;
+            background-color: #8ab1d6;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        .btn-container button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <a href="/" class="home-link">
+            <img src="../static/img/global.png" alt="𝐆𝐋𝐎𝐁𝐀𝐋 𝐈𝐍𝐒𝐈𝐆𝐇𝐓 WITH BBC" width="250">
+        </a>
+    </div>
+    <div class="post-detail">
+        <div class="post-info">
+            <p>작성자: <span>{{ post.nickname }}</span></p>
+            <p>게시일시: <span>{{ post.created_at }}</span></p>
+            <p>조회수: <span>{{ post.views }}</span></p>
+        </div>
+        <h2>{{ post.title }}</h2>
+        <div class="post-content">
+            <p>{{ post.contents }}</p>
+        </div>
+        <div class="btn-container">
+            <button onclick="location.href='/opinion_board'">돌아가기</button>
+        </div>
+    </div>
+</body>
+</html>
