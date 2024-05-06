@@ -133,18 +133,51 @@ def show_post(post_id):
     try:
         connection = get_db_connection()
         with connection.cursor() as cursor:
-            sql = """SELECT * 
-                    FROM posts
-                    JOIN users ON posts.writter = users.id;
-                """
-            cursor.execute(sql)
-            posts = cursor.fetchall()
-            post = next((item for item in posts if item["_id"] == post_id), None)
-            return render_template('post_contents.html', post = post)
+            # 게시물 정보 가져오기
+            post_sql = """
+                SELECT * 
+                FROM posts
+                JOIN users ON posts.writter = users.id
+                WHERE posts._id = %s;
+            """
+            cursor.execute(post_sql, (post_id,))
+            post = cursor.fetchone()
+
+            # 해당 게시물에 대한 댓글 가져오기
+            comments_sql = """
+                SELECT DATE_FORMAT(comments.created_at, '%%Y-%%m-%%d %%H:%%i') AS created_at, 
+                        users.nickname AS nickname, 
+                        comments.content AS content
+                        FROM comments
+                        JOIN users ON comments.user_id = users.id
+                        WHERE comments.post_id = %s;
+                    """
+            cursor.execute(comments_sql, (post_id,))
+            comments = cursor.fetchall()
+
+            return render_template('post_contents.html', post=post, comments=comments)
     except Exception as e:
         print("FAILED")
     finally:
         connection.close()
+
+
+@app.route("/add_comment", methods = ["POST"])
+def add_comment():
+    try:
+        data = request.json
+        post_id = data['postId']
+        content = data['content']
+        user_id = session['login_user']
+        connection = get_db_connection()
+        with connection.cursor() as cursor:
+            sql = "INSERT INTO comments (post_id, user_id, content) VALUES(%s, %s, %s)"
+            cursor.execute(sql,(post_id, user_id, content))
+            connection.commit()
+    finally:
+        connection.close()
+    return redirect(url_for('show_post', post_id=post_id))
+
 
 @app.route('/check_id_duplicate', methods=['POST'])
 def check_id_duplicate():
@@ -159,6 +192,26 @@ def check_id_duplicate():
             cursor.execute(sql, (id,))
             id_data = cursor.fetchone()
             return jsonify({"id_exists": id_data is not None})
+    finally:
+        connection.close()
+
+@app.route('/get_comments/<int:post_id>')
+def get_comment(post_id):
+    try:
+        connection = get_db_connection()
+        with connection.cursor() as cursor:
+            sql = """
+                SELECT DATE_FORMAT(comments.created_at, '%%Y-%%m-%%d %%H:%%i') AS created_at, users.nickname AS nickname, comments.content AS content
+                FROM comments
+                JOIN users ON comments.user_id = users.id
+                WHERE comments.post_id = %s;
+            """
+            cursor.execute(sql, (post_id,))
+            comments = cursor.fetchall()
+            return jsonify(comments)
+    except Exception as e:
+        print("Error fetching comments: ", e)
+        return jsonify([])
     finally:
         connection.close()
 

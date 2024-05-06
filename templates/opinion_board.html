@@ -102,10 +102,10 @@
         // 서버에서 게시물 데이터를 가져와서 표시하는 함수
         async function fetchPosts() {
             try {
-                const response = await fetch('/get_posts'); // 서버의 경로에 따라 수정해주세요.
+                const response = await fetch('/get_posts'); 
                 const posts = await response.json();
                 const postTableBody = document.getElementById('postTableBody');
-                postTableBody.innerHTML = ''; // 이전 데이터 초기화
+                postTableBody.innerHTML = ''; 
                 posts.forEach(post => {
                     const row = `
                         <tr onclick="window.location.href='/post/${post._id}'">
