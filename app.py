@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, session, jsonify, redirect, u
 import pymysql
 import hashlib
 from setting import Config
+from genNews import GenerateNews
 
 app = Flask(__name__)
 app.config.from_object(Config)
@@ -31,6 +32,7 @@ def opinion_board():
 
 @app.route('/maps')
 def maps():
+    GenerateNews.generate_news()
     error = None
     return render_template("maps.html", error = error, google_maps_api_key = app.config['GOOGLE_MAPS_API_KEY'])
 
@@ -116,7 +118,8 @@ def get_posts():
             sql = """
                     SELECT DATE_FORMAT(posts.created_at, '%Y/%m/%d/%H:%i') AS created_at, title, views, nickname, _id
                     FROM posts 
-                    JOIN users ON posts.writter = users.id;
+                    JOIN users ON posts.writter = users.id
+                    ORDER BY _id;
                 """
             cursor.execute(sql)
             posts = cursor.fetchall()
@@ -147,10 +150,12 @@ def show_post(post_id):
             comments_sql = """
                 SELECT DATE_FORMAT(comments.created_at, '%%Y-%%m-%%d %%H:%%i') AS created_at, 
                         users.nickname AS nickname, 
-                        comments.content AS content
+                        comments.content AS content,
+                        comments._id
                         FROM comments
                         JOIN users ON comments.user_id = users.id
-                        WHERE comments.post_id = %s;
+                        WHERE comments.post_id = %s
+                        ORDER BY comments._id
                     """
             cursor.execute(comments_sql, (post_id,))
             comments = cursor.fetchall()
@@ -201,10 +206,11 @@ def get_comment(post_id):
         connection = get_db_connection()
         with connection.cursor() as cursor:
             sql = """
-                SELECT DATE_FORMAT(comments.created_at, '%%Y-%%m-%%d %%H:%%i') AS created_at, users.nickname AS nickname, comments.content AS content
+                SELECT DATE_FORMAT(comments.created_at, '%%Y-%%m-%%d %%H:%%i') AS created_at, comments._id, users.nickname AS nickname, comments.content AS content
                 FROM comments
                 JOIN users ON comments.user_id = users.id
-                WHERE comments.post_id = %s;
+                WHERE comments.post_id = %s
+                ORDER BY comments._id;
             """
             cursor.execute(sql, (post_id,))
             comments = cursor.fetchall()

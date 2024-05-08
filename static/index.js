@@ -1,5 +1,3 @@
-// index.js
-
 window.initMap = function () {
   const map = new google.maps.Map(document.getElementById("map"), {
     zoom: 4,
@@ -8,7 +6,7 @@ window.initMap = function () {
 
   const malls = [
     {
-      label: "A",
+      label: "US, CA",
       name: "미국, 캐나다",
       lat: 37.09024,
       lng: -95.712891,
@@ -16,15 +14,15 @@ window.initMap = function () {
         '<a href="us-canada.html">' + "미국, 캐나다</a> ",
     },
     {
-      label: "J",
+      label: "Asia",
       name: "아시아",
-      lat: 36.204824,
-      lng: 138.252924,
+      lat: 35.907757,
+      lng: 127.766922,
       site:
         '<a href="asia.html">' + "아시아</a> ",
     },
     {
-      label: "D",
+      label: "EU",
       name: "유럽",
       lat: 51.165691,
       lng: 10.451526,
@@ -32,7 +30,7 @@ window.initMap = function () {
         '<a href="europe">' + "유럽</a> ",
     },
     {
-      label: "E",
+      label: "GB",
       name: "영국",
       lat: 55.378051,
       lng: -3.435973,
