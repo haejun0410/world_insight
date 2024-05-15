@@ -90,11 +90,24 @@
             <p>작성자: <span>{{ post.nickname }}</span></p>
             <p>게시일시: <span>{{ post.created_at }}</span></p>
             <p>조회수: <span>{{ post.views }}</span></p>
+            <p><!-- Edit Post Button -->
+                {% if 'login_user' in session and session['login_user'] == post.writter %}
+                <a href="{{ url_for('edit_post', post_id=post._id) }}">
+                    <button>Edit Post</button>
+                </a>
+                {% endif %}</p>
         </div>
         <h2>{{ post.title }}</h2>
         <div class="post-content">
             <p>{{ post.contents }}</p>
         </div>
+        <!-- Edit Post Button
+        {% if 'login_user' in session and session['login_user'] == post.writter %}
+        <a href="{{ url_for('edit_post', post_id=post._id) }}">
+            <button>Edit Post</button>
+        </a>
+        {% endif %} -->
+
         <div class="comment-form">
             <textarea id="commentContent" placeholder="댓글을 입력하세요..." rows="4"></textarea>
             <button onclick="submitCommnet()">댓글 작성</button>
@@ -114,24 +127,42 @@
         
     </div>
     <script>
+
+        
         function autoResize(textarea) {
             textarea.style.height = 'auto';
             textarea.style.height = textarea.scrollHeight + 'px';
         }
         function submitCommnet(){
-            var content = document.getElementById("commentContent").value;
-            var postId = "{{post._id}}";
-            var xhr = new XMLHttpRequest();
-            xhr.open("POST", "/add_comment", true);
-            xhr.setRequestHeader("Content-Type", "application/json");
-            xhr.onreadystatechange = function(){
-                if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
-                    fetchAndDisplayComments(); 
-                    console.log("댓글 작성 완료");
-                }
-            };
-            var data = JSON.stringify({ "postId": postId,"content": content });
-            xhr.send(data);
+            fetch('/check_login')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.logged_in){
+                        var content = document.getElementById("commentContent").value;
+                        if (content == ""){
+                            alert("댓글을 입력해 주세요")
+                        }
+                        else{
+                            var postId = "{{post._id}}";
+                            var xhr = new XMLHttpRequest();
+                            xhr.open("POST", "/add_comment", true);
+                            xhr.setRequestHeader("Content-Type", "application/json");
+                            xhr.onreadystatechange = function(){
+                                if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
+                                    fetchAndDisplayComments(); 
+                                    console.log("댓글 작성 완료");
+                                }
+                            };
+                            var data = JSON.stringify({ "postId": postId,"content": content });
+                            xhr.send(data);
+                        }
+                    }
+                    else{
+                        alert("로그인이 필요합니다.")
+                    }
+                })
+                .catch(error => console.log("Error Checking login Status", error))
+            
         }
 
         function updateComments(commentsData) {

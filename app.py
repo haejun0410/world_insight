@@ -3,6 +3,7 @@ import pymysql
 import hashlib
 from setting import Config
 from genNews import GenerateNews
+from datetime import datetime, timedelta
 
 app = Flask(__name__)
 app.config.from_object(Config)
@@ -123,7 +124,6 @@ def get_posts():
                 """
             cursor.execute(sql)
             posts = cursor.fetchall()
-            print(posts)
             return jsonify(posts)
     except Exception as e:
         print("Error fecthing posts: ", e)
@@ -136,6 +136,14 @@ def show_post(post_id):
     try:
         connection = get_db_connection()
         with connection.cursor() as cursor:
+            if 'viewed_posts' not in session :
+                session['viewed_posts'] = {}
+            if post_id not in session['viewed_posts'] or (datetime.now() - session['viewed_posts'][post_id] >= timedelta(minutes=1)):
+                session['viewed_posts'][post_id] = datetime.now()
+                update_sql = "UPDATE posts SET views = views + 1 WHERE _id = %s"
+                cursor.execute(update_sql, (post_id, ))
+                connection.commit()
+
             # 게시물 정보 가져오기
             post_sql = """
                 SELECT * 
@@ -159,13 +167,46 @@ def show_post(post_id):
                     """
             cursor.execute(comments_sql, (post_id,))
             comments = cursor.fetchall()
-
             return render_template('post_contents.html', post=post, comments=comments)
     except Exception as e:
         print("FAILED")
     finally:
         connection.close()
 
+@app.route('/edit_post/<int:post_id>', methods=['GET', 'POST'])
+def edit_post(post_id):
+    error = None
+    if 'login_user' not in session:
+        return redirect(url_for('login'))
+
+    connection = get_db_connection()
+    try:
+        with connection.cursor() as cursor:
+            if request.method == 'POST':
+                title = request.form['Title']
+                content = request.form['Content']
+
+                update_sql = "UPDATE posts SET title = %s, contents = %s WHERE _id = %s AND writter = %s"
+                cursor.execute(update_sql, (title, content, post_id, session['login_user']))
+                connection.commit()
+                return redirect(url_for('opinion_board'))
+
+            else:
+                # Fetch existing post data
+                post_sql = "SELECT title, contents FROM posts WHERE _id = %s AND writter = %s"
+                cursor.execute(post_sql, (post_id, session['login_user']))
+                post = cursor.fetchone()
+                if not post:
+                    return "Unauthorized to edit this post"
+
+                return render_template('edit_post.html', post=post, error=error)
+    except Exception as e:
+        print("Error editing post:", e)
+        error = "Error editing post."
+    finally:
+        connection.close()
+
+    return render_template('edit_post.html', error=error)
 
 @app.route("/add_comment", methods = ["POST"])
 def add_comment():
