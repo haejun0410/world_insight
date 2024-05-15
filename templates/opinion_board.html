@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>𝐎𝐏𝐈𝐍𝐈𝐎𝐍 𝐁𝐎𝐀𝐑𝐃</title>
     <style>
-        /* CSS 스타일링 */
         body {
             background-color: hsl(210, 22%, 82%);
             font-family: Arial, sans-serif;
@@ -27,11 +26,11 @@
             background-color: #f2f2f2;
         }
         th:nth-child(1), th:nth-child(3), td:nth-child(4) {
-            width: 20%; /* 게시일시와 조회수 열의 너비를 줄임 */
+            width: 20%; 
         }
         th:nth-child(2) {
-            width: 50%; /* 제목 열의 너비를 늘임 */
-            text-align: center; /* 제목 열의 텍스트 정렬을 왼쪽으로 조정 */
+            width: 50%; 
+            text-align: center; 
         }
 
         .btn-container {
@@ -41,15 +40,14 @@
             padding: 5px 10px;
             margin: 5px;
             background-color: #8ab1d6;
-            text-decoration: none; /* 링크 밑줄 제거 */
-            border-radius: 5px; /* 버튼 모서리 둥글게 */
+            text-decoration: none; 
+            border-radius: 5px; 
             font-size: 20px;
         }
         .btn-container button:hover {
             background-color: #0056b3;
         }
 
-        /* 마우스 호버링 효과 */
         tr:hover {
             background-color: #ddd;
             cursor: pointer;
@@ -64,10 +62,8 @@
     </div>
     <h1>𝐎𝐏𝐈𝐍𝐈𝐎𝐍 𝐁𝐎𝐀𝐑𝐃</h1>
 
-    <!-- 게시물 목록 -->
     <div id="postList"></div>
 
-    <!-- 게시물 테이블 -->
     <table>
         <thead>
             <tr>
@@ -80,7 +76,6 @@
         <tbody id="postTableBody"></tbody>
     </table>
 
-    <!-- 의견 쓰기 페이지로 이동하는 버튼 -->
     <div class="btn-container">
         <button onclick="writePost()">𝐰𝐫𝐢𝐭𝐞</button>
     </div>
@@ -99,7 +94,6 @@
                 .catch(error => console.error('Error checking login status:', error));
         }
 
-        // 서버에서 게시물 데이터를 가져와서 표시하는 함수
         async function fetchPosts() {
             try {
                 const response = await fetch('/get_posts'); 
@@ -121,8 +115,6 @@
                 console.error('Error fetching posts:', error);
             }
         }
-
-        // 페이지가 로드될 때 게시물 데이터를 가져옴
         window.onload = fetchPosts;
     </script>
 </body>

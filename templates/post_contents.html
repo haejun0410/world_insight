@@ -3,9 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>게시물 상세 정보</title>
+    <title>{{ post.title }}</title>
     <style>
-        /* CSS 스타일링 */
         body {
             background-color: hsl(210, 22%, 82%);
             font-family: Arial, sans-serif;
@@ -67,15 +66,15 @@
         textarea {
             width: 100%;
             padding: 10px;
-            margin-bottom: 0; /* 여기를 수정함 */
-            border: none; /* 테두리 없앰 */
-            outline: none; /* 포커스 효과 제거 */
-            resize: none; /* 크기 조절 비활성화 */
+            margin-bottom: 0; 
+            border: none; 
+            outline: none; 
+            resize: none; 
         }
         textarea {
-            min-height: 10px; /* 최소 높이 설정 */
+            min-height: 10px; 
             height: auto;
-            overflow-y: hidden; /* 세로 스크롤바 감춤 */
+            overflow-y: hidden; 
         }
     </style>
 </head>
@@ -90,23 +89,18 @@
             <p>작성자: <span>{{ post.nickname }}</span></p>
             <p>게시일시: <span>{{ post.created_at }}</span></p>
             <p>조회수: <span>{{ post.views }}</span></p>
-            <p><!-- Edit Post Button -->
+            <p>
                 {% if 'login_user' in session and session['login_user'] == post.writter %}
                 <a href="{{ url_for('edit_post', post_id=post._id) }}">
                     <button>Edit Post</button>
                 </a>
-                {% endif %}</p>
+                {% endif %}
+            </p>
         </div>
         <h2>{{ post.title }}</h2>
         <div class="post-content">
             <p>{{ post.contents }}</p>
         </div>
-        <!-- Edit Post Button
-        {% if 'login_user' in session and session['login_user'] == post.writter %}
-        <a href="{{ url_for('edit_post', post_id=post._id) }}">
-            <button>Edit Post</button>
-        </a>
-        {% endif %} -->
 
         <div class="comment-form">
             <textarea id="commentContent" placeholder="댓글을 입력하세요..." rows="4"></textarea>

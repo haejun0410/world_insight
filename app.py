@@ -21,22 +21,26 @@ def get_db_connection():
 def hash_password(password):
     return hashlib.sha256(password.encode()).hexdigest()
 
+# 메인 페이지
 @app.route('/')
 def home():
     error = None
     return render_template('home.html', error=error)
 
+# 게시판
 @app.route('/opinion_board')
 def opinion_board():
     error = None
     return render_template("opinion_board.html", error = error)
 
+# 지도 화면
 @app.route('/maps')
 def maps():
     GenerateNews.generate_news()
     error = None
     return render_template("maps.html", error = error, google_maps_api_key = app.config['GOOGLE_MAPS_API_KEY'])
 
+# 로그인 창
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     error = None
@@ -64,11 +68,13 @@ def login():
 
     return render_template('login.html', error=error)
 
+# 로그아웃 기능
 @app.route('/logout')
 def logout():
     session.pop('login_user', None)
     return redirect(url_for('home'))
 
+# 회원 가입 창
 @app.route('/register.html', methods=['GET', 'POST'])
 def register():
     error = None
@@ -93,6 +99,7 @@ def register():
         return redirect(url_for('login'))
     return render_template('register.html', error=error)
 
+# 게시글 작성 창
 @app.route('/post_write', methods = ['GET', 'POST'])
 def post_write():
     error = None
@@ -111,6 +118,7 @@ def post_write():
         return redirect(url_for('opinion_board'))
     return render_template('write_post.html',error = error)
 
+# 게시물 불러오는 기능
 @app.route('/get_posts')
 def get_posts():
     try:
@@ -131,6 +139,7 @@ def get_posts():
     finally:
         connection.close()
 
+# 게시글 보여주는 창
 @app.route('/post/<int:post_id>')
 def show_post(post_id):
     try:
@@ -144,7 +153,7 @@ def show_post(post_id):
                 cursor.execute(update_sql, (post_id, ))
                 connection.commit()
 
-            # 게시물 정보 가져오기
+            # 게시물 정보 
             post_sql = """
                 SELECT * 
                 FROM posts
@@ -154,7 +163,7 @@ def show_post(post_id):
             cursor.execute(post_sql, (post_id,))
             post = cursor.fetchone()
 
-            # 해당 게시물에 대한 댓글 가져오기
+            # 게시물에 대한 댓글 
             comments_sql = """
                 SELECT DATE_FORMAT(comments.created_at, '%%Y-%%m-%%d %%H:%%i') AS created_at, 
                         users.nickname AS nickname, 
@@ -173,6 +182,7 @@ def show_post(post_id):
     finally:
         connection.close()
 
+# 게시글 수정 창
 @app.route('/edit_post/<int:post_id>', methods=['GET', 'POST'])
 def edit_post(post_id):
     error = None
@@ -208,6 +218,7 @@ def edit_post(post_id):
 
     return render_template('edit_post.html', error=error)
 
+# 댓글 추가하는 기능
 @app.route("/add_comment", methods = ["POST"])
 def add_comment():
     try:
@@ -224,23 +235,7 @@ def add_comment():
         connection.close()
     return redirect(url_for('show_post', post_id=post_id))
 
-
-@app.route('/check_id_duplicate', methods=['POST'])
-def check_id_duplicate():
-    id = request.form.get('register_id')
-    if not id:
-        return jsonify({"id_exists": False})
-
-    connection = get_db_connection()
-    try:
-        with connection.cursor() as cursor:
-            sql = "SELECT id FROM users WHERE id = %s"
-            cursor.execute(sql, (id,))
-            id_data = cursor.fetchone()
-            return jsonify({"id_exists": id_data is not None})
-    finally:
-        connection.close()
-
+# 댓글 불러오는 기능(id 체크)
 @app.route('/get_comments/<int:post_id>')
 def get_comment(post_id):
     try:
@@ -262,6 +257,24 @@ def get_comment(post_id):
     finally:
         connection.close()
 
+# 아이디 중복 체크 기능
+@app.route('/check_id_duplicate', methods=['POST'])
+def check_id_duplicate():
+    id = request.form.get('register_id')
+    if not id:
+        return jsonify({"id_exists": False})
+
+    connection = get_db_connection()
+    try:
+        with connection.cursor() as cursor:
+            sql = "SELECT id FROM users WHERE id = %s"
+            cursor.execute(sql, (id,))
+            id_data = cursor.fetchone()
+            return jsonify({"id_exists": id_data is not None})
+    finally:
+        connection.close()
+
+# 닉네임 중복 확인
 @app.route('/check_nickname_duplicate', methods=['POST'])
 def check_nickname_duplicate():
     nickname = request.form.get('register_nickname')
@@ -278,6 +291,7 @@ def check_nickname_duplicate():
     finally:
         connection.close()
 
+# 로그인 상태 확인
 @app.route('/check_login')
 def check_login():
     if 'login_user' in session:
