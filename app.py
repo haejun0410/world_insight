@@ -145,13 +145,9 @@ def show_post(post_id):
     try:
         connection = get_db_connection()
         with connection.cursor() as cursor:
-            if 'viewed_posts' not in session :
-                session['viewed_posts'] = {}
-            if post_id not in session['viewed_posts'] or (datetime.now() - session['viewed_posts'][post_id] >= timedelta(minutes=1)):
-                session['viewed_posts'][post_id] = datetime.now()
-                update_sql = "UPDATE posts SET views = views + 1 WHERE _id = %s"
-                cursor.execute(update_sql, (post_id, ))
-                connection.commit()
+            update_sql = "UPDATE posts SET views = views + 1 WHERE _id = %s"
+            cursor.execute(update_sql, (post_id, ))
+            connection.commit()
 
             # 게시물 정보 
             post_sql = """
@@ -162,7 +158,6 @@ def show_post(post_id):
             """
             cursor.execute(post_sql, (post_id,))
             post = cursor.fetchone()
-
             # 게시물에 대한 댓글 
             comments_sql = """
                 SELECT DATE_FORMAT(comments.created_at, '%%Y-%%m-%%d %%H:%%i') AS created_at, 
@@ -178,7 +173,8 @@ def show_post(post_id):
             comments = cursor.fetchall()
             return render_template('post_contents.html', post=post, comments=comments)
     except Exception as e:
-        print("FAILED")
+        print("FAILED {}".format(e))
+        return "error {}".format(e)
     finally:
         connection.close()
 
@@ -218,6 +214,16 @@ def edit_post(post_id):
 
     return render_template('edit_post.html', error=error)
 
+@app.route('/delete_post/<int:post_id>')
+def delete_post(post_id):
+    error = None
+    connection = get_db_connection()
+    with connection.cursor() as cursor:
+        delete_sql = "delete from posts where _id = %s"
+        cursor.execute(delete_sql, (post_id,))
+        connection.commit()
+        return redirect(url_for('opinion_board'))
+    
 # 댓글 추가하는 기능
 @app.route("/add_comment", methods = ["POST"])
 def add_comment():
