@@ -27,13 +27,13 @@ class GenerateNews:
             for article in articles:
                 # Extract the headline safely
                 headline_tag = article.find('h2', attrs={'data-testid': 'card-headline'})
-                headline = headline_tag.get_text(strip=True)
+                headline = headline_tag.get_text(strip=True) if headline_tag else "No headline available"
             
                 descript_tag = article.find('p', attrs={'data-testid': 'card-description'})
-                descript = descript_tag.get_text(strip=True) 
+                descript = descript_tag.get_text(strip=True) if descript_tag else "No description available"
             
                 link_tag = article.find('a', attrs={'data-testid': 'internal-link'})
-                link = 'https://www.bbc.com' + link_tag.get('href') 
+                link = 'https://www.bbc.com' + link_tag.get('href') if link_tag else "#"
             
                 image_tag = article.find('div', attrs={'class': 'sc-a898728c-1 jWZsJP'})
                 image = image_tag.find_all('img')
