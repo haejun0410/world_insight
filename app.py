@@ -40,6 +40,104 @@ def maps():
     error = None
     return render_template("maps.html", error = error, google_maps_api_key = app.config['GOOGLE_MAPS_API_KEY'])
 
+@app.route('/mypage', methods=['GET', 'POST'])
+def mypage():
+    if 'login_user' not in session:
+        return redirect(url_for('login'))
+    
+    error = None
+    user_info = None
+
+    connection = get_db_connection()
+    try:
+        with connection.cursor() as cursor:
+            sql = "SELECT * FROM users WHERE id = %s"
+            cursor.execute(sql, (session['login_user'],))
+            user_info = cursor.fetchone()
+            print(user_info)
+    finally:
+        connection.close()
+    
+    return render_template('mypage.html', error=error, user_info=user_info)
+
+@app.route('/update_nickname', methods=['POST'])
+def update_nickname():
+    if 'login_user' not in session:
+        return redirect(url_for('login'))
+    
+    new_nickname = request.form['new_nickname']
+    
+    connection = get_db_connection()
+    try:
+        with connection.cursor() as cursor:
+            sql = "UPDATE users SET nickname = %s WHERE id = %s"
+            cursor.execute(sql, (new_nickname, session['login_user']))
+            print('nickname update sql 실행')
+            connection.commit()
+    finally:
+        connection.close()
+    
+    return redirect(url_for('mypage'))
+
+@app.route('/update_password', methods=['POST'])
+def update_password():
+    if 'login_user' not in session:
+        return redirect(url_for('login'))
+
+    current_password = request.form['current_password']
+    new_password = request.form['new_password']
+    hashed_current_password = hash_password(current_password)
+    hashed_new_password = hash_password(new_password)
+
+    connection = get_db_connection()
+    try:
+        with connection.cursor() as cursor:
+            # 현재 비밀번호 확인
+            sql = "SELECT * FROM users WHERE id = %s AND password = %s"
+            cursor.execute(sql, (session['login_user'], hashed_current_password))
+            user = cursor.fetchone()
+            if user:
+                # 새로운 비밀번호로 업데이트
+                sql = "UPDATE users SET password = %s WHERE id = %s"
+                cursor.execute(sql, (hashed_new_password, session['login_user']))
+                connection.commit()
+                return redirect(url_for('mypage',  user_info = user, message="Password updated successfully"))
+            else:
+                # 현재 비밀번호가 일치하지 않는 경우
+                return render_template('mypage.html', user_info = user, error="Current password is incorrect")
+    except Exception as e:
+        # 데이터베이스 오류 처리
+        print(f"Error: {e}")
+        return render_template('mypage.html', user_info = user, error="An error occurred while updating the password")
+    finally:
+        connection.close()
+
+
+
+@app.route('/delete_account', methods=['POST'])
+def delete_account():
+    if 'login_user' not in session:
+        return redirect(url_for('login'))
+    
+    connection = get_db_connection()
+    try:
+        with connection.cursor() as cursor:
+            # 사용자 게시글 삭제
+            sql_delete_posts = "DELETE FROM posts WHERE writter = %s"
+            cursor.execute(sql_delete_posts, (session['login_user'])) 
+            connection.commit()
+            # 사용자 정보 삭제
+            sql_delete_user = "DELETE FROM users WHERE id = %s"
+            cursor.execute(sql_delete_user, (session['login_user']))  
+            connection.commit()
+    except Exception as e:
+        print("에러 발생:", e)  
+    finally:
+        connection.close()
+    
+    session.pop('login_user', None)
+    return redirect(url_for('home'))
+
 # 로그인 창
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -323,7 +421,7 @@ def check_id_duplicate():
 # 닉네임 중복 확인
 @app.route('/check_nickname_duplicate', methods=['POST'])
 def check_nickname_duplicate():
-    nickname = request.form.get('register_nickname')
+    nickname = request.form.get('register_nickname') or request.form.get('new_nickname')
     if not nickname:
         return jsonify({"nickname_exists": False})
 

@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>마이페이지</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: hsl(210, 22%, 82%);
+            font-family: 'Arial', sans-serif;
+        }
+        .header {
+            padding: 10px;
+            margin: 10px;
+        }
+        h1, h2, h3 {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        form {
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+        label {
+            font-weight: bold;
+        }
+        input[type="text"], input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+        }
+        input[type="submit"], input[type="button"], button[type="submit"], button[type="button"] {
+            width: 100%;
+            padding: 10px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        input[type="submit"]:hover, input[type="button"]:hover, button[type="submit"]:hover, button[type="button"]:hover {
+            background-color: #0056b3;
+        }
+        .btn-danger {
+            width: 100%;
+            padding: 10px;
+            border-radius: 4px;
+            background-color: #dc3545;
+            color: white;
+            border: none;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        .btn-danger:hover {
+            background-color: #c82333;
+        }
+        .button {
+            width: 100%;
+            padding: 10px;
+            border-radius: 4px;
+            background-color: #8ab1d6;
+            color: black;
+            text-decoration: none;
+            font-size: 22px;
+            cursor: pointer;
+        }
+        .button:hover {
+            background-color: #3b73a7;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        table, th, td {
+            border: 1px solid black;
+            padding: 8px;
+        }
+        th {
+            background-color: #f2f2f2;
+            width: 30%;
+        }
+        td {
+            width: 70%;
+        }
+        .box {
+            height: 200px; /* 높이 조정 */
+            overflow-y: auto; /* 스크롤 추가 */
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <a href="/" class="home-link">
+            <img src="static/img/global.png" alt="𝐆𝐋𝐎𝐁𝐀𝐋 𝐈𝐍𝐒𝐈𝐆𝐇𝐓 WITH BBC" width="250">
+        </a>
+    </div>
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <title>𝐌𝐲 𝐩𝐚𝐠𝐞</title>
+                <div class="row">
+                    <div class="col-md-12">
+                        <form action="{{ url_for('update_nickname') }}" method="post">
+                            <h2>내 정보</h2>
+                            <table>
+                                <tr>
+                                    <th>ID</th>
+                                    <td>{{ user_info.id }}</td>
+                                </tr>
+                                <tr>
+                                    <th>닉네임</th>
+                                    <td>{{ user_info.nickname }}</td>
+                                </tr>
+                            </table>
+                        </form>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <form action="{{ url_for('update_nickname') }}" method="post">
+                            <h2>닉네임 변경</h2>
+                            <label for="new_nickname">새로운 닉네임:</label>
+                            <input type="text" name="new_nickname" id="new_nickname" required>
+                            <button type="button" onclick="checkNicknameDuplicate()" class="button">중복 확인</button>
+                            <button type="submit" class="button">변경</button>
+                        </form>
+                    </div>
+                    <div class="col-md-6">
+                        <form action="{{ url_for('update_password') }}" method="post" onsubmit="return checkPasswordMatch()">
+                            <h2>비밀번호 변경</h2>
+                            <label for="current_password">현재 비밀번호:</label>
+                            <input type="password" name="current_password" id="current_password" required>
+                            <br>
+                            <label for="new_password">새로운 비밀번호:</label>
+                            <input type="password" name="new_password" id="new_password" required>
+                            <button type="submit" class="button">변경</button>
+                        </form>
+                    </div>
+                </div>
+                <form action="{{ url_for('delete_account') }}" method="post">
+                    <h2>회원 탈퇴</h2>
+                    <button type="submit" class="btn btn-danger" onclick="confirmDelete()">탈퇴</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    <script>
+        function checkNicknameDuplicate() {
+            let value = document.getElementById('new_nickname').value;
+            if (!value) {
+                alert("닉네임을 입력해주세요.");
+                return;
+            }
+
+            let xhr = new XMLHttpRequest();
+            xhr.open('POST', '/check_nickname_duplicate', true);
+            xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === 4) {
+                    if (xhr.status === 200) {
+                        let data = JSON.parse(xhr.responseText);
+
+                        if (data.nickname_exists) {
+                            alert("이미 사용중인 닉네임입니다.");
+                            
+                        } else {
+                            alert("사용 가능한 닉네임입니다.");
+                            
+                        }
+                    } else {
+                        alert("서버 오류가 발생했습니다.");
+                        
+                    }
+                }
+            };
+
+            xhr.send("new_nickname=" + encodeURIComponent(value));
+        }
+
+        function checkPasswordMatch() {
+            let currentPassword = document.getElementById('current_password').value;
+            let hashedCurrentPassword = CryptoJS.SHA256(currentPassword).toString(CryptoJS.enc.Hex);
+            let savedPassword = '{{ user_info.password }}'; ///문제 
+            console.log('{{user_info.password}}');
+            if (hashedCurrentPassword !== savedPassword) {
+                alert("현재 비밀번호가 일치하지 않습니다.");
+                return false; 
+            }
+            return true; // 비밀번호가 일치하면 폼 제출 허용
+        }
+        
+        function confirmDelete() {
+            if (confirm("정말로 회원 탈퇴하시겠습니까?")) {
+                var xhr = new XMLHttpRequest();
+                xhr.open("POST", "/delete_account", true);
+                xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+                xhr.onreadystatechange = function () {
+                    if (xhr.readyState === 4) {
+                        if (xhr.status === 200) {
+                            alert("회원 탈퇴가 완료되었습니다.");
+                            window.location.href = "/"; // 탈퇴 완료 후 홈 페이지로 리디렉션
+                        } else {
+                            alert("서버 오류가 발생했습니다.");
+                        }
+                    }
+                };
+                xhr.send();
+                return false;
+            } else {
+                return false; // 사용자가 취소한 경우 폼 제출을 취소합니다.
+            }
+        }
+
+        
+
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+</body>
+</html>

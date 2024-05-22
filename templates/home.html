@@ -40,8 +40,10 @@
     <!-- 버튼을 추가 -->
     <a href="opinion_board" class="button">𝐎𝐏𝐈𝐍𝐈𝐎𝐍 𝐁𝐎𝐀𝐑𝐃</a>
     <a href="maps" class="button">𝐌𝐀𝐏</a>
+    
     {% if 'login_user' in session %}
         <a href="logout" class="button">𝐋𝐎𝐆𝐎𝐔𝐓</a>
+        <a href="mypage" class="button">My Page</a>
     {% else %}
         <a href="login" class="button">𝐋𝐎𝐆𝐈𝐍</a>
     {% endif %}
