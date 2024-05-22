@@ -56,3 +56,10 @@ instance/
 
 # Setting File
 setting.py
+
+# Generatd News HTML
+africa.html  
+asia.html 
+australia.html 
+europe.html 
+uk.html 
