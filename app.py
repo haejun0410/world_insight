@@ -54,7 +54,6 @@ def mypage():
             sql = "SELECT * FROM users WHERE id = %s"
             cursor.execute(sql, (session['login_user'],))
             user_info = cursor.fetchone()
-            print(user_info)
     finally:
         connection.close()
     
@@ -72,7 +71,6 @@ def update_nickname():
         with connection.cursor() as cursor:
             sql = "UPDATE users SET nickname = %s WHERE id = %s"
             cursor.execute(sql, (new_nickname, session['login_user']))
-            print('nickname update sql 실행')
             connection.commit()
     finally:
         connection.close()
@@ -157,7 +155,6 @@ def login():
                 if data:
                     print("Login Success")
                     session['login_user'] = id
-                    print(session)
                     return redirect(url_for('home'))
                 else:
                     error = "INVALID"

@@ -52,7 +52,7 @@ class GenerateNews:
                 html_output += "</div>"
                 if image:
                     html_output += "<div class='card-img'>"
-                    for img in image:
+                    for img in image[1:]:
                         html_output += str(img)
                     html_output += "</div>"
                 html_output += "</div>"
