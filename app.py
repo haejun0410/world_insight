@@ -283,6 +283,26 @@ def get_uk():
     error = None
     return render_template('uk.html', error=error)
 
+@app.route('/get_africa')
+def get_africa():
+    error = None
+    return render_template('africa.html', error=error)
+
+@app.route('/get_aust')
+def get_aust():
+    error = None
+    return render_template('australia.html', error=error)
+
+@app.route('/get_latin')
+def get_latin():
+    error = None
+    return render_template('latin_america.html', error=error)
+
+@app.route('/get_middle_east')
+def get_middle_east():
+    error = None
+    return render_template('middle_east.html', error=error)
+
 # 아이디 중복 체크 기능
 @app.route('/check_id_duplicate', methods=['POST'])
 def check_id_duplicate():

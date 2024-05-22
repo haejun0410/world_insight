@@ -44,7 +44,40 @@ window.initMap = function () {
       site:
         '<a href="get_uk">' + "영국 최신뉴스</a> "+
         '<p><a href="https://trends.google.co.kr/trends/trendingsearches/daily?geo=GB&hl=ko"></p>'+ "영국 실시간 급상승 검색어</a>",
+    },
+    {
+      label: "S",
+      name: "아프리카",
+      lat: 20.481864, 
+      lng: 17.999568,
+      site:
+        '<a href="get_africa">' + "아프리카</a> ",
+    },
+    {
+      label: "T",
+      name: "오스트레일리아",
+      lat: -20.124764,
+      lng: 134.366753,
+      site:
+        '<a href="get_aust">' + "오스트레일리아</a> ",
+    },
+    {
+      label: "L",
+      name: "라틴아메리카",
+      lat: -3.070860, 
+      lng: -64.876612,
+      site:
+        '<a href="get_latin">' + "라틴아메리카</a> ",
+    },
+    {
+      label: "ME",
+      name: "중동",
+      lat: 35.041948, 
+      lng: 50.343318,
+      site:
+        '<a href="get_middle_east">' + "중동</a> ",
     }
+
   ];
 
   const bounds = new google.maps.LatLngBounds();
