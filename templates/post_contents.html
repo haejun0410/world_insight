@@ -1,83 +1,116 @@
 <!DOCTYPE html>
 <html lang="ko">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ post.title }}</title>
     <style>
         body {
-            background-color: hsl(210, 22%, 82%);
+            background: linear-gradient(to bottom, #cdd2d5 20%, hsl(210, 22%, 82%) 20%, hsl(210, 22%, 82%) 100%);
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 20px;
         }
-        .post-detail {
-            max-width: 600px;
-            margin: 0 auto;
+
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
         }
+
+        .header img {
+            max-width: 100%;
+            float: left;
+        }
+
+        .post-detail {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            border: 1px solid #ddd;
+        }
+
         .post-detail h2 {
             margin-bottom: 20px;
         }
-        .post-detail .post-info {
-            margin-bottom: 20px;
+
+        .post-info {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 40px;
         }
-        .post-detail .post-info p {
-            margin: 0;
-            display: inline-block;
-            margin-right: 20px;
+
+        .post-info p {
             font-size: 14px;
             color: #666;
         }
-        .post-detail .post-content {
-            padding: 10px;
+
+        .post-content {
+            padding: 40px;
+            border-top: 1px solid #ddd;
+            border-bottom: 1px solid #ddd;
+            margin: 20px 0;
+            background-color: #f9f9f9;
+        }
+
+        .comments {
+            margin-top: 40px;
+            background-color: hsl(210, 22%, 82%);
+            padding: 20px;
             border: 1px solid #ddd;
-            background-color: #fff;
         }
+
         .comment {
-            margin-top: 20px;
-        }
-        .comment p {
-            margin: 5px 0;
-        }
-        .comment .comment-content {
-            margin-left: 20px;
+            margin-bottom: 20px;
             border-left: 2px solid #ccc;
             padding-left: 10px;
         }
+
+        .comment p {
+            margin: 5px 0;
+        }
+
+        .comment-content p {
+            margin: 0;
+        }
+
         .comment-form {
-            margin-top: 20px;
+            margin-top: 40px;
+            border-top: 1px solid #ddd;
+            padding-top: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #fff;
+            padding: 20px;
+            border: 1px solid #ddd;
         }
+
         .comment-form textarea {
-            width: 100%;
+            flex: 1;
             padding: 10px;
-            margin-bottom: 10px;
+            margin-right: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            resize: none;
         }
+
         .comment-form button {
-            padding: 5px 10px;
+            padding: 10px 20px;
             background-color: #8ab1d6;
             border: none;
             border-radius: 5px;
             font-size: 16px;
             cursor: pointer;
         }
+
         .comment-form button:hover {
             background-color: #0056b3;
         }
-        textarea {
-            width: 100%;
-            padding: 10px;
-            margin-bottom: 0; 
-            border: none; 
-            outline: none; 
-            resize: none; 
-        }
-        textarea {
-            min-height: 10px; 
-            height: auto;
-            overflow-y: hidden; 
-        }
     </style>
 </head>
+
 <body>
     <div class="header">
         <a href="/" class="home-link">
@@ -92,10 +125,10 @@
             <p>
                 {% if 'login_user' in session and session['login_user'] == post.writter %}
                 <a href="{{ url_for('edit_post', post_id=post._id) }}">
-                    <button>Edit Post</button>
+                    <button>수정하기</button>
                 </a>
                 <a href="{{ url_for('delete_post', post_id=post._id) }}" onclick="return confirmDelete()">
-                    <button>Delete Post</button>
+                    <button>삭제하기</button>
                 </a>
                 {% endif %}
             </p>
@@ -113,65 +146,65 @@
         <div class="comments">
             <h3>댓글</h3>
             {% for comment in comments %}
-                <div class="comment">
-                    <p><strong>{{ comment.nickname }}</strong> - {{ comment.created_at }}</p>
-                    <div class="comment-content">
-                        <p>{{ comment.content }}</p>
-                    </div>
+            <div class="comment">
+                <p><strong>{{ comment.nickname }}</strong> - {{ comment.created_at }}</p>
+                <div class="comment-content">
+                    <p>{{ comment.content }}</p>
                 </div>
+            </div>
             {% endfor %}
         </div>
-        
+
     </div>
     <script>
 
-        
+
         function autoResize(textarea) {
             textarea.style.height = 'auto';
             textarea.style.height = textarea.scrollHeight + 'px';
         }
-        function submitCommnet(){
+        function submitCommnet() {
             fetch('/check_login')
                 .then(response => response.json())
                 .then(data => {
-                    if (data.logged_in){
+                    if (data.logged_in) {
                         var content = document.getElementById("commentContent").value;
-                        if (content == ""){
+                        if (content == "") {
                             alert("댓글을 입력해 주세요")
                         }
-                        else{
+                        else {
                             var postId = "{{post._id}}";
                             var xhr = new XMLHttpRequest();
                             xhr.open("POST", "/add_comment", true);
                             xhr.setRequestHeader("Content-Type", "application/json");
-                            xhr.onreadystatechange = function(){
+                            xhr.onreadystatechange = function () {
                                 if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
-                                    fetchAndDisplayComments(); 
+                                    fetchAndDisplayComments();
                                     console.log("댓글 작성 완료");
                                 }
                             };
-                            var data = JSON.stringify({ "postId": postId,"content": content });
+                            var data = JSON.stringify({ "postId": postId, "content": content });
                             xhr.send(data);
                         }
                     }
-                    else{
+                    else {
                         alert("로그인이 필요합니다.")
                     }
                 })
                 .catch(error => console.log("Error Checking login Status", error))
-            
+
         }
 
         function updateComments(commentsData) {
             var commentsDiv = document.querySelector(".comments");
-            commentsDiv.innerHTML = ""; 
+            commentsDiv.innerHTML = "";
 
             var commentsHeader = document.createElement("h3");
             commentsHeader.textContent = "댓글";
             commentsDiv.appendChild(commentsHeader);
 
 
-            commentsData.forEach(function(comment) {
+            commentsData.forEach(function (comment) {
                 var commentElement = document.createElement("div");
                 commentElement.classList.add("comment");
 
@@ -191,13 +224,13 @@
             });
         }
 
-        
+
         function fetchAndDisplayComments() {
             var xhr = new XMLHttpRequest();
             xhr.open("GET", "/get_comments/{{ post._id }}", true);
-            xhr.onreadystatechange = function() {
+            xhr.onreadystatechange = function () {
                 if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
-                    var commentsData = JSON.parse(xhr.responseText); 
+                    var commentsData = JSON.parse(xhr.responseText);
                     updateComments(commentsData);
                 }
             };
@@ -211,6 +244,7 @@
         function confirmDelete() {
             return confirm("정말로 이 게시물을 삭제하시겠습니까?");
         }
-        </script>
+    </script>
 </body>
+
 </html>

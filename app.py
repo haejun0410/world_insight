@@ -263,6 +263,26 @@ def get_comment(post_id):
     finally:
         connection.close()
 
+@app.route('/get_us_canada')
+def get_us_canada():
+    error = None
+    return render_template('us-canada.html', error=error)
+
+@app.route('/get_asia')
+def get_asia():
+    error = None
+    return render_template('asia.html', error=error)
+
+@app.route('/get_eu')
+def get_eu():
+    error = None
+    return render_template('europe.html', error=error)
+
+@app.route('/get_uk')
+def get_uk():
+    error = None
+    return render_template('uk.html', error=error)
+
 # 아이디 중복 체크 기능
 @app.route('/check_id_duplicate', methods=['POST'])
 def check_id_duplicate():
