@@ -223,7 +223,7 @@ def get_posts():
                     SELECT DATE_FORMAT(posts.created_at, '%Y/%m/%d/%H:%i') AS created_at, title, views, nickname, _id
                     FROM posts 
                     JOIN users ON posts.writter = users.id
-                    ORDER BY _id;
+                    ORDER BY _id DESC;
                 """
             cursor.execute(sql)
             posts = cursor.fetchall()
