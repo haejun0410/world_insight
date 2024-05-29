@@ -188,8 +188,7 @@
                 return true;
             }
         }
-
-        // 회원가입 양식 유효성 검사 함수에 비밀번호 확인 추가
+        
         function validateForm() {
             let id = document.getElementById("register_id").value;
             let pw = document.getElementById("register_pw").value;
@@ -199,7 +198,7 @@
             let phone_number = document.getElementById("register_phone_number").value;
             
             if (id.trim() == ""){
-                alert("아이디(이메일)을 입력해주세요.");
+                alert("아이디를 입력해주세요.");
                 return false;
             }
             if (checked_id == false){
@@ -214,7 +213,7 @@
                 alert("비밀번호를 입력해주세요.");
                 return false;
             }
-            else if (!checkPasswordMatch()) { // 비밀번호 확인 추가
+            else if (!checkPasswordMatch()) { 
                 return false;
             }
             else if (name.trim() ==""){

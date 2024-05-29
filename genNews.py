@@ -12,8 +12,17 @@ class GenerateNews:
             <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
             <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
             <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+            <style>
+                .header {
+                    padding : 10px;
+                    margin : 10px;
+                }
+                img {
+                    padding : 15px;
+                }
+            </style>
         </head>
-        <body>
+        <body style="background-color: #c7d1db;">
         """
         
         countrylist = ['africa', 'asia', 'australia', 'europe', 'latin_america', 'middle_east', 'us-canada', 'uk']
@@ -32,8 +41,8 @@ class GenerateNews:
             articles = soup.find_all('div', attrs={'data-testid': 'liverpool-card'})
 
             html_output += "<div class='container'>"
+            html_output += "<div class='header'><a href = '/' class='home-link'><img src='static/img/global.png' alt='𝐆𝐋𝐎𝐁𝐀𝐋 𝐈𝐍𝐒𝐈𝐆𝐇𝐓 WITH BBC' width='250'></a></div>"
             html_output += "<h1 class='text-center my-4'>BBC News Articles from " + f'{country}' + "</h1>"
-
             for article in articles:
                 headline_tag = article.find('h2', attrs={'data-testid': 'card-headline'})
                 headline = headline_tag.get_text(strip=True) if headline_tag else "No headline available"
@@ -41,7 +50,7 @@ class GenerateNews:
                 descript = descript_tag.get_text(strip=True) if descript_tag else "No description available"
                 link_tag = article.find('a', attrs={'data-testid': 'internal-link'})
                 link = 'https://www.bbc.com' + link_tag.get('href') if link_tag else "#"
-                image_tag = article.find('div', attrs={'class': 'sc-a898728c-1 jWZsJP'})
+                image_tag = article.find('div', attrs={'class': 'sc-fd6cb93-1 hXQtlW'})
                 image = image_tag.find_all('img') if image_tag else []
 
                 html_output += "<div class='card mb-4'>"

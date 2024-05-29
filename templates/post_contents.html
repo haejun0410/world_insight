@@ -95,7 +95,14 @@
             border-radius: 5px;
             resize: none;
         }
-
+        button {
+            padding: 10px 10px;
+            background-color: #8ab1d6;
+            border: none;
+            border-radius: 5px;
+            font-size: 10px;
+            cursor: pointer;
+        }
         .comment-form button {
             padding: 10px 20px;
             background-color: #8ab1d6;
@@ -180,7 +187,7 @@
                             xhr.onreadystatechange = function () {
                                 if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
                                     fetchAndDisplayComments();
-                                    console.log("댓글 작성 완료");
+                                    document.getElementById("commentContent").value = "";
                                 }
                             };
                             var data = JSON.stringify({ "postId": postId, "content": content });

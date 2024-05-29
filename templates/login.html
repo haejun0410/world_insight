@@ -82,6 +82,9 @@
                     <div class="text-center mt-3">
                         <input type="button" class="button" value="회원가입" name="register" onclick="location.href='register.html'">
                     </div>
+                    {% if error %}
+                    <script>showErrorAlert("{{ error }}");</script>
+                    {% endif %}
                 </form>
             </div>
         </div>
@@ -102,6 +105,31 @@
 
             return true; 
         }
+        function showErrorAlert(error) {
+            if (error) {
+                alert("아이디나 비밀번호가 틀립니다.");
+            }
+        }
+        document.getElementById("authForm").addEventListener("submit", function(event) {
+            event.preventDefault(); // 폼 제출 기본 동작 중지
+
+            if (validateForm()) {
+                fetch("/login", {
+                    method: "POST",
+                    body: new FormData(event.target)
+                })
+                .then(response => response.text())
+                .then(data => {
+                    if (data.includes("INVALID")) {
+                        showErrorAlert("INVALID");
+                    } else {
+                        // 로그인 성공 시 처리
+                        window.location.href = "/"; // 메인 페이지로 이동
+                    }
+                })
+                .catch(error => console.error("Error:", error));
+            }
+        });
     </script>
 </body>
 </html>
