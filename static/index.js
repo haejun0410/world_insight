@@ -51,7 +51,9 @@ window.initMap = function () {
       lat: 20.481864, 
       lng: 17.999568,
       site:
-        '<a href="get_africa">' + "아프리카</a> ",
+        '<a href="get_africa">' + "아프리카</a> "+
+        '<p><a href="https://trends.google.co.kr/trends/trendingsearches/daily?geo=NG&hl=ko"></p>'+ "나이지리아 실시간 급상승 검색어</a>"+
+        '<p><a href="https://trends.google.co.kr/trends/trendingsearches/daily?geo=EG&hl=ko"></p>'+ "이집트 실시간 급상승 검색어</a>",
     },
     {
       label: "T",
@@ -59,7 +61,8 @@ window.initMap = function () {
       lat: -20.124764,
       lng: 134.366753,
       site:
-        '<a href="get_aust">' + "오스트레일리아</a> ",
+        '<a href="get_aust">' + "오스트레일리아</a> "+
+        '<p><a href="https://trends.google.co.kr/trends/trendingsearches/daily?geo=AU&hl=ko"></p>'+ "오스트레일리아 실시간 급상승 검색어</a>",
     },
     {
       label: "L",
@@ -67,7 +70,9 @@ window.initMap = function () {
       lat: -3.070860, 
       lng: -64.876612,
       site:
-        '<a href="get_latin">' + "라틴아메리카</a> ",
+        '<a href="get_latin">' + "라틴아메리카</a> "+
+        '<p><a href="https://trends.google.co.kr/trends/trendingsearches/daily?geo=AR&hl=ko"></p>'+ "아르헨티나 실시간 급상승 검색어</a>"+
+        '<p><a href="https://trends.google.co.kr/trends/trendingsearches/daily?geo=BR&hl=ko"></p>'+ "브라질 실시간 급상승 검색어</a>",
     },
     {
       label: "ME",
@@ -75,7 +80,9 @@ window.initMap = function () {
       lat: 35.041948, 
       lng: 50.343318,
       site:
-        '<a href="get_middle_east">' + "중동</a> ",
+        '<a href="get_middle_east">' + "중동</a> "+
+        '<p><a href="https://trends.google.co.kr/trends/trendingsearches/daily?geo=IL&hl=ko"></p>'+ "이스라엘 실시간 급상승 검색어</a>"+
+        '<p><a href="https://trends.google.co.kr/trends/trendingsearches/daily?geo=SA&hl=ko"></p>'+ "사우디아라비아 실시간 급상승 검색어</a>",
     }
 
   ];
